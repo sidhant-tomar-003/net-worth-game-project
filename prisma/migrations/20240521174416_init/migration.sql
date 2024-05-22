@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "User" ALTER COLUMN "lastVisited" SET DATA TYPE BIGINT;

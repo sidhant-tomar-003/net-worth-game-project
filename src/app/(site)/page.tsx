@@ -1,12 +1,140 @@
+"use client";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { DynamicWidget, UserProfile, useDynamicContext } from '@dynamic-labs/sdk-react-core';
 
 export default function Home() {
+  const [message, setMessage] = useState('');
+  const { primaryWallet, user, isAuthenticated, handleLogOut } = useDynamicContext();
+  
+  const [verifiedCredentials, setVerifiedCredentials] = useState<UserProfile | null>(null);
+
+  function generateRandomUsername() {
+    const animals = [
+      'aardvark', 'albatross', 'alligator', 'ant', 'anteater', 'antelope', 'ape', 'armadillo', 'baboon', 'badger',
+      'bat', 'bear', 'beaver', 'bee', 'bison', 'buffalo', 'butterfly', 'camel', 'caribou', 'cat',
+      'cheetah', 'chicken', 'chimpanzee', 'chinchilla', 'clam', 'cobra', 'codfish', 'coyote', 'crab', 'crane',
+      'crocodile', 'crow', 'deer', 'dinosaur', 'dog', 'dolphin', 'donkey', 'dragonfly', 'duck', 'eagle',
+      'eel', 'elephant', 'elk', 'emu', 'falcon', 'ferret', 'finch', 'fish', 'flamingo', 'fly',
+      'fox', 'frog', 'gazelle', 'gecko', 'gerbil', 'giraffe', 'gnat', 'gnu', 'goat', 'goldfish',
+      'goose', 'gorilla', 'grasshopper', 'hamster', 'hare', 'hawk', 'hedgehog', 'heron', 'hippo', 'hornet',
+      'horse', 'hummingbird', 'hyena', 'ibex', 'iguana', 'jackal', 'jaguar', 'kangaroo', 'koala', 'leech',
+      'lemur', 'leopard', 'lion', 'lizard', 'llama', 'lobster', 'locust', 'loon', 'lynx', 'meerkat',
+      'mink', 'mole', 'mongoose', 'monkey', 'moose', 'mosquito', 'moth', 'mouse', 'mule', 'muskrat',
+      'narwhal', 'newt', 'nightingale', 'octopus', 'opossum', 'ostrich', 'otter', 'owl', 'oyster', 'panda',
+      'panther', 'parrot', 'partridge', 'peacock', 'pelican', 'penguin', 'pheasant', 'pig', 'pigeon', 'porcupine',
+      'puma', 'rabbit', 'raccoon', 'ram', 'rat', 'raven', 'reindeer', 'rhinoceros', 'salamander', 'salmon',
+      'sardine', 'scorpion', 'seahorse', 'seal', 'shark', 'sheep', 'skunk', 'sloth', 'snail', 'snake',
+      'sparrow', 'spider', 'squirrel', 'swan', 'termite', 'tiger', 'toad', 'trout', 'turkey', 'turtle',
+      'vole', 'vulture', 'walrus', 'warthog', 'wasp', 'weasel', 'whale', 'wolf', 'wolverine', 'wombat',
+      'woodchuck', 'woodpecker', 'worm', 'zebra'
+    ];
+  
+    const randomIndex = Math.floor(Math.random() * animals.length);
+    const randomAnimal = animals[randomIndex];
+    const username = `anonymous${randomAnimal}`;
+  
+    return username;
+  }
+
+    // const [balance, setBalance] = useState<string | null>(null);
+
+
+    // useEffect(() => {
+    //     const fetchBalance = async () => {
+    //       if (primaryWallet) {
+    //         const value = await primaryWallet.connector.getBalance();
+    //         if (value) {
+    //             setBalance(value);
+    //         }
+    //       }
+    //     };
+    //     fetchBalance();
+    //     }, [primaryWallet]);
+
+  const handleClick = async () => {
+    console.log("hello wurld", user, user?.verifiedCredentials[2].oauthDisplayName)
+
+    if (user === null || primaryWallet === null) {
+      // output an error saying "still authenticating your details; please wait a few moments"
+      console.log("hol' up laddy-o")
+      return;
+    }  
+    const balance = await primaryWallet.connector.getBalance();
+    let username;
+    
+    if (user !== null && user !== undefined) {
+      username = user.verifiedCredentials.length == 2 ? user.verifiedCredentials[2].oauthDisplayName : generateRandomUsername();
+      console.log("woah!", username);
+    } else {
+      username = generateRandomUsername();
+    }
+    console.log(generateRandomUsername());
+    console.log("the details I know:", username, user?.email, balance)
+    const response = await fetch('/api/updateUserInfo', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ 
+        username: username,
+        email: user?.email,
+        new_balance: parseFloat(balance || '0'),
+        }),
+    });
+  };
+  // useEffect(() => {
+  //   const updateUser = async () => {
+  //     // setTimeout(async () => {}, 300)
+  //     console.log("HERE'S USER", user);
+  //     if (user) {
+  //       setVerifiedCredentials(user);
+  //       let balance = null;
+  //         if (primaryWallet) {
+  //           balance = primaryWallet.connector.getBalance();
+  //           const wallet_address = primaryWallet.address;
+  //         }
+  //       // username, email, balance, multiplier, profilePicture
+  //       const username = verifiedCredentials?.verifiedCredentials.length === 3 ? verifiedCredentials?.verifiedCredentials[2].oauthDisplayName : null;
+        
+  //       const email = verifiedCredentials?.email;
+  //       // const response = await fetch('/api/updateUserInfo', {
+  //       //   method: 'POST',
+  //       //   headers: {
+  //       //     'Content-Type': 'application/json',
+  //       //   },
+  //       //   body: JSON.stringify({ 
+  //       //     username: username,
+  //       //     email: email,
+  //       //     balance: balance,
+  //       //    }),
+  //       // });
+
+  //       // const data = await response.json();
+  
+  //       // if (response.ok) {
+  //       //   setMessage(`Updated: ${data.name} -> ${data.value}`);
+  //       // } else {
+  //       //   setMessage(`Error: ${data.error}`);
+  //       // }
+  //       console.log("Wowzers!", username, email, balance);
+  //     }
+  //     else {
+  //       console.log("Zamn! He isn't authenticated!");
+  //     }
+      
+  //     console.log("Wow! It ran once on mounting!");
+  //   };
+  
+  //   updateUser();
+  // }, [user]); // Empty dependency array means this runs once on mount
+  
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
         <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
           Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
+          <code className="font-mono font-bold">src/app/page.tsx</code>
         </p>
         <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
           <a
@@ -39,6 +167,7 @@ export default function Home() {
         />
       </div>
 
+        <button onClick={handleClick}>Update Net Worth</button>
       <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
         <a
           href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
