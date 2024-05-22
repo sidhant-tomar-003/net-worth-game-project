@@ -53,8 +53,13 @@ export default function Home() {
     //     }, [primaryWallet]);
 
   const handleClick = async () => {
-    console.log("hello wurld", user, user?.verifiedCredentials[2].oauthDisplayName)
-
+    console.log("hello wurld", user, user?.verifiedCredentials[2].oauthDisplayName, user?.verifiedCredentials.length)
+    // const response1 = await fetch('/api/fetchLeaderboard', {
+    //   method: "POST",
+    //   headers: {'Content-Type': 'application/json'}, 
+    // });
+    // const data = await response1.json();
+    // console.log("WOW ", data);
     if (user === null || primaryWallet === null) {
       // output an error saying "still authenticating your details; please wait a few moments"
       console.log("hol' up laddy-o")
@@ -64,7 +69,7 @@ export default function Home() {
     let username;
     
     if (user !== null && user !== undefined) {
-      username = user.verifiedCredentials.length == 2 ? user.verifiedCredentials[2].oauthDisplayName : generateRandomUsername();
+      username = user.verifiedCredentials.length === 3 ? user.verifiedCredentials[2].oauthDisplayName : generateRandomUsername();
       console.log("woah!", username);
     } else {
       username = generateRandomUsername();
@@ -167,7 +172,8 @@ export default function Home() {
         />
       </div>
 
-        <button onClick={handleClick}>Update Net Worth</button>
+        {(isAuthenticated) ? <button onClick={handleClick}>Update Net Worth</button> : <p> please authenticate </p>}
+          
       <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
         <a
           href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"

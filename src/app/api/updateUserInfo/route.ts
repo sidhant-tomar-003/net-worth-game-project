@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../lib/prisma';
 // TODO: DO ERROR HANDLING 
 
-
+// TODO: get all the tokens and stuff from wagmi somehow
 export async function POST(req: Request) {
   // check if the user exists in the table. if they don't then create an entry for them, then update the leaderboards table
   try {
@@ -20,6 +20,7 @@ export async function POST(req: Request) {
     
     // Try to find the user by emai
     console.log("initial checkuser check call:", checkUser);
+    new_balance = 1;
     let updateUser = null; 
     let time = BigInt(Date.now());
     let lastVis = BigInt(0);
@@ -43,10 +44,10 @@ export async function POST(req: Request) {
       multiplier = checkUser.multiplier;
       lastVis = checkUser.lastVisited;
     }
-    if (time !== BigInt(0) && time - lastVis < 24 * 60 * 60 * 1000) {
-      // message "too soon"
-      return new Response(null, { status: 400 });
-    }
+    // if (time !== BigInt(0) && time - lastVis < 24 * 60 * 60 * 1000) {
+    //   // message "too soon"
+    //   return new Response(null, { status: 400 });
+    // }
     // update the user multiplier and refresh their balance to be the max of history or current
     updateUser = await prisma.user.update({
       where: {
@@ -57,22 +58,22 @@ export async function POST(req: Request) {
       },
     });
     
-    prisma.leaderboard.upsert({
+    const updateLeaderboard = await prisma.leaderboard.upsert({
       where: {
         userId: checkUser.id,
       },
       update: {
-        score: checkUser.balance * (checkUser.multiplier), // Use the new multiplier
+        score: updateUser.balance * (updateUser.multiplier), // Use the new multiplier
       },  
       create: {
-        userId: checkUser.id,
-        username: checkUser.username,
-        email: checkUser.email,
-        profilePicture: checkUser.profilePicture,
-        score: checkUser.balance * (checkUser.multiplier + 1),
+        userId: updateUser.id,
+        username: updateUser.username,
+        email: updateUser.email,
+        profilePicture: updateUser.profilePicture,
+        score: updateUser.balance * (updateUser.multiplier),
       },
     });
-
+    console.log(updateLeaderboard);
     return new Response(null, { status: 200 });
   } catch (error) {
     console.error('Error updating user and leaderboard:', error);

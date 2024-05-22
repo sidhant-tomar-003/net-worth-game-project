@@ -30,6 +30,6 @@ model Leaderboard {
   username       String
   email          String   @unique
   profilePicture String
-  score          Int
+  score          Int      
   createdAt      DateTime @default(now())
 }
