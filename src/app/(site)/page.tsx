@@ -37,29 +37,8 @@ export default function Home() {
     return username;
   }
 
-    // const [balance, setBalance] = useState<string | null>(null);
-
-
-    // useEffect(() => {
-    //     const fetchBalance = async () => {
-    //       if (primaryWallet) {
-    //         const value = await primaryWallet.connector.getBalance();
-    //         if (value) {
-    //             setBalance(value);
-    //         }
-    //       }
-    //     };
-    //     fetchBalance();
-    //     }, [primaryWallet]);
-
   const handleClick = async () => {
     console.log("hello wurld", user, user?.verifiedCredentials[2].oauthDisplayName, user?.verifiedCredentials.length)
-    // const response1 = await fetch('/api/fetchLeaderboard', {
-    //   method: "POST",
-    //   headers: {'Content-Type': 'application/json'}, 
-    // });
-    // const data = await response1.json();
-    // console.log("WOW ", data);
     if (user === null || primaryWallet === null) {
       // output an error saying "still authenticating your details; please wait a few moments"
       console.log("hol' up laddy-o")
@@ -88,51 +67,6 @@ export default function Home() {
         }),
     });
   };
-  // useEffect(() => {
-  //   const updateUser = async () => {
-  //     // setTimeout(async () => {}, 300)
-  //     console.log("HERE'S USER", user);
-  //     if (user) {
-  //       setVerifiedCredentials(user);
-  //       let balance = null;
-  //         if (primaryWallet) {
-  //           balance = primaryWallet.connector.getBalance();
-  //           const wallet_address = primaryWallet.address;
-  //         }
-  //       // username, email, balance, multiplier, profilePicture
-  //       const username = verifiedCredentials?.verifiedCredentials.length === 3 ? verifiedCredentials?.verifiedCredentials[2].oauthDisplayName : null;
-        
-  //       const email = verifiedCredentials?.email;
-  //       // const response = await fetch('/api/updateUserInfo', {
-  //       //   method: 'POST',
-  //       //   headers: {
-  //       //     'Content-Type': 'application/json',
-  //       //   },
-  //       //   body: JSON.stringify({ 
-  //       //     username: username,
-  //       //     email: email,
-  //       //     balance: balance,
-  //       //    }),
-  //       // });
-
-  //       // const data = await response.json();
-  
-  //       // if (response.ok) {
-  //       //   setMessage(`Updated: ${data.name} -> ${data.value}`);
-  //       // } else {
-  //       //   setMessage(`Error: ${data.error}`);
-  //       // }
-  //       console.log("Wowzers!", username, email, balance);
-  //     }
-  //     else {
-  //       console.log("Zamn! He isn't authenticated!");
-  //     }
-      
-  //     console.log("Wow! It ran once on mounting!");
-  //   };
-  
-  //   updateUser();
-  // }, [user]); // Empty dependency array means this runs once on mount
   
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">

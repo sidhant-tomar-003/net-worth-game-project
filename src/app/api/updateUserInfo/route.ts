@@ -1,6 +1,6 @@
 // src/pages/api/user.ts
 import { NextApiRequest, NextApiResponse } from 'next';
-import prisma from '../../../lib/prisma';
+import prisma from '../../lib/prisma';
 // TODO: DO ERROR HANDLING 
 
 // TODO: get all the tokens and stuff from wagmi somehow
@@ -75,6 +75,7 @@ export async function POST(req: Request) {
     });
     console.log(updateLeaderboard);
     return new Response(null, { status: 200 });
+    
   } catch (error) {
     console.error('Error updating user and leaderboard:', error);
     return new Response(null, { status: 500 });

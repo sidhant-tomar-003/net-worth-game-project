@@ -40,7 +40,6 @@ const Page = () => {
 
     return (
         <>
-            <Leaderboard />
             <div>
                 {verifiedCredentials && verifiedCredentials ? (
                     <div>

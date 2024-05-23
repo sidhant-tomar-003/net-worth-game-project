@@ -1,34 +1,55 @@
-// src/pages/api/user.ts
+// src/pages/api/fetchLeaderboard.ts
 import { NextApiRequest, NextApiResponse } from 'next';
-import prisma from '../../../lib/prisma';
+import { redis } from '../../lib/redis';
+import prisma from '../../lib/prisma';
 import { NextResponse } from 'next/server';
-// TODO: DO ERROR HANDLING 
 
-// TODO: get all the tokens and stuff from wagmi somehow
+const LEADERBOARD_CACHE_KEY = 'leaderboardv1';
+const PAGE_SIZE = 10;
+
 export async function POST(req: Request) {
-  // check if the user exists in the table. if they don't then create an entry for them, then update the leaderboards table
-  
+  const { page } = await req.json();
+  const limit = PAGE_SIZE;
+  const cacheKey = `${LEADERBOARD_CACHE_KEY}:${page}`;
+
   try {
-    const { page, limit } =await req.json();
-    console.log("heheheha", page, limit);
-    const pageInt = parseInt(page as string, 10);
-    const limitInt = parseInt(limit as string, 10);
-      const leaderboard = await prisma.leaderboard.findMany({
-        skip: (pageInt - 1) * limitInt,
-        take: limitInt,
-        orderBy: {
-            score: 'desc',
-        },
+    // Try to fetch from Redis cache first
+    let cachedData = await redis.get(cacheKey);
+    if (cachedData) {
+      cachedData = JSON.parse(cachedData);
+      console.log('Cache hit');
+      return NextResponse.json({cachedData});
+    }
+
+    console.log('Cache miss, fetching from database');
+    // If cache miss, fetch from database
+    const pageInt = parseInt(page, 10);
+    const limitInt = limit;
+
+    const leaderboard = await prisma.leaderboard.findMany({
+      skip: (pageInt - 1) * limitInt,
+      take: limitInt,
+      orderBy: {
+        score: 'desc',
+      },
     });
 
-    console.log("hmmium", leaderboard[0]);
-    
     const totalUsers = await prisma.leaderboard.count();
     const totalPages = Math.ceil(totalUsers / limitInt);
+
+    const response = {
+      leaderboard: leaderboard,
+      totalPages: totalPages,
+      currentPage: pageInt,
+    };
+
+    // Cache the fetched data
+    await redis.set(cacheKey, JSON.stringify(response), 'EX', 2400);
+
     return NextResponse.json({
-        leaderboard: leaderboard,
-        totalPages: totalPages,
-        currentPage: pageInt,
+      leaderboard: leaderboard,
+      totalPages: totalPages,
+      currentPage: pageInt,
     });
   } catch (error) {
     console.error('Error fetching leaderboard:', error);
