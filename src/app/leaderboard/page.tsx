@@ -1,6 +1,5 @@
 "use client";
 import Leaderboard from '@/components/leaderboard';
-import SmartContract from '@/components/smartContract';
 import { UserProfile, useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import React, { useEffect, useState } from 'react'
 
