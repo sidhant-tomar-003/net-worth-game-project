@@ -33,7 +33,7 @@ const Leaderboard = () => {
     // const { leaderboard, totalPages, currentPage } = await response.json();
     let data = await response.json();
     if (data.cachedData) {
-        data = data.cachedData;
+      data = data.cachedData;
     }
     console.log(data, data.cachedData);
     if (data) {
@@ -59,17 +59,17 @@ const Leaderboard = () => {
     fetchData(page);
   }, [page]);
 
-//   useEffect(() => {
-//     const channel = supabase.channel('realtime leadeerboard').on('postgres_changes', {
-//         event: '*',
-//         schema: 'public',
-//         table: 'todos'
-//     }, () => fetchData);
+  //   useEffect(() => {
+  //     const channel = supabase.channel('realtime leadeerboard').on('postgres_changes', {
+  //         event: '*',
+  //         schema: 'public',
+  //         table: 'todos'
+  //     }, () => fetchData);
 
-//     return () => {
-//         supabase.removeChannel(channel);
-//     }
-//   }, [supabase]);
+  //     return () => {
+  //         supabase.removeChannel(channel);
+  //     }
+  //   }, [supabase]);
 
   return (
     <div className="container mx-auto p-4">

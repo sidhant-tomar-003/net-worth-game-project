@@ -57,7 +57,7 @@ export async function POST(req: Request) {
         multiplier: multiplier + 1,
       },
     });
-    
+    console.log("updated user", updateUser)
     const updateLeaderboard = await prisma.leaderboard.upsert({
       where: {
         userId: checkUser.id,
@@ -73,7 +73,7 @@ export async function POST(req: Request) {
         score: updateUser.balance * (updateUser.multiplier),
       },
     });
-    console.log(updateLeaderboard);
+    console.log("updated leaderboard", updateLeaderboard);
     return new Response(null, { status: 200 });
     
   } catch (error) {

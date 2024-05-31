@@ -14,6 +14,7 @@ import { http } from 'viem';
 import { mainnet } from 'viem/chains';
 
 import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
+import { useEffect } from "react";
 
 const config = createConfig({
   chains: [mainnet],
@@ -26,11 +27,16 @@ const config = createConfig({
 const queryClient = new QueryClient();
 
 export default function ProviderWrapper({ children }: React.PropsWithChildren) {
+  useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DYNAMIC_ENVIRONMENT_ID == null) {
+      console.error("dynamic env ID not found");
+    }
+  }, []);
   return (
     <DynamicContextProvider
       theme='dark'
       settings={{
-        environmentId: "46b4d88d-d37b-420a-9470-b89770fc8ae4",
+        environmentId: process.env.NEXT_PUBLIC_DYNAMIC_ENVIRONMENT_ID || '',
         walletConnectors: [EthereumWalletConnectors],
       }}
     >
