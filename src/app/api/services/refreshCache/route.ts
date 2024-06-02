@@ -1,5 +1,6 @@
-import prisma from "@/app/lib/prisma";
-import { redis } from "@/app/lib/redis";
+import prisma from "../../../lib/prisma";
+import { redis } from "../../../lib/redis"
+
 import { NextResponse } from "next/server";
 
 var cron = require('node-cron');

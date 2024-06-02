@@ -1,5 +1,5 @@
 "use client";
-import Leaderboard from '@/components/leaderboard';
+import Leaderboard from './../../components/leaderboard';
 import { UserProfile, useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import React, { useEffect, useState } from 'react'
 
