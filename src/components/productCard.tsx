@@ -4,6 +4,7 @@ import { useConnect, useAccount, useWriteContract } from 'wagmi'
 import { injected } from 'wagmi/connectors'
 import { mainnet, sepolia } from 'viem/chains';
 import { DAI_ABI } from '../../config/abi';
+import { Address } from 'viem';
 
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 
@@ -48,7 +49,7 @@ export const ProductCard: FC = () => {
             // `${recAddr}`
             const data = await writeContractAsync({
                 chainId: sepolia.id,
-                address: recAddr,
+                address: recAddr as Address,
                 functionName: 'transfer',
                 abi: DAI_ABI,
                 args: [
