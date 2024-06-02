@@ -1,7 +1,7 @@
-// src/components/Leaderboard.tsx
+
 "use client";
 import React, { useEffect, useState } from 'react';
-// import supabase from '../app/lib/supabase';
+
 
 interface User {
   id: number;
@@ -59,17 +59,6 @@ const Leaderboard = () => {
     fetchData(page);
   }, [page]);
 
-  //   useEffect(() => {
-  //     const channel = supabase.channel('realtime leadeerboard').on('postgres_changes', {
-  //         event: '*',
-  //         schema: 'public',
-  //         table: 'todos'
-  //     }, () => fetchData);
-
-  //     return () => {
-  //         supabase.removeChannel(channel);
-  //     }
-  //   }, [supabase]);
 
   return (
     <div className="container mx-auto p-4">

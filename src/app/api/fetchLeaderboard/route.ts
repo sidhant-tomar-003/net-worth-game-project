@@ -1,7 +1,7 @@
 // src/pages/api/fetchLeaderboard.ts
-import { NextApiRequest, NextApiResponse } from 'next';
-import { redis } from '../../lib/redis';
-import prisma from '../../lib/prisma';
+// import { NextApiRequest, NextApiResponse } from 'next';
+import { redis } from '@/../lib/redis';
+import prisma from '@/../lib/prisma';
 import { NextResponse } from 'next/server';
 
 const LEADERBOARD_CACHE_KEY = 'leaderboardv1';
@@ -58,5 +58,3 @@ export async function POST(req: Request) {
     await prisma.$disconnect();
   }
 }
-
-export const runtime = 'edge'

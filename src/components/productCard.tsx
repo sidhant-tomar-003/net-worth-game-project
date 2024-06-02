@@ -2,7 +2,7 @@
 import { FC, FormEventHandler, useState } from "react";
 import { useConnect, useAccount, useWriteContract } from 'wagmi'
 import { injected } from 'wagmi/connectors'
-import { mainnet, sepolia } from 'viem/chains';
+import { sepolia } from 'viem/chains';
 import { DAI_ABI } from '../../config/abi';
 import { Address } from 'viem';
 
