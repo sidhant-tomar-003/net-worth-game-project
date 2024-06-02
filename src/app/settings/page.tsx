@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { DynamicWidget, UserProfile, useDynamicContext } from '@dynamic-labs/sdk-react-core';
-import Loading from './../../components//loading';
-
+import Loading from '@/components/loading';
+import Leaderboard from '@/components/leaderboard';
 
 const Page = () => {
     // const { user } = useDynamicContext();

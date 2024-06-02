@@ -1,7 +1,8 @@
 "use client";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { DynamicWidget, UserProfile, useDynamicContext } from '@dynamic-labs/sdk-react-core';
-
+import Head from "next/head";
 
 export default function Home() {
   const [message, setMessage] = useState('');
